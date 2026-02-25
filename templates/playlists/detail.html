@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Playlist: {{ playlist.name }}{% endblock %}
+{% block content %}
+<div class="card bg-dark text-white p-4 mb-4">
+    <h2>{{ playlist.name }}</h2>
+    <p>Public: {{ playlist.is_public|yesno:"Yes,No" }}</p>
+    {% if user == playlist.user %}
+        <a href="{% url 'playlists:edit' playlist.id %}" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="{% url 'playlists:delete' playlist.id %}" class="btn btn-danger btn-sm">Delete</a>
+    {% endif %}
+    <div class="row mt-3">
+        {% for video in playlist.videos.all %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                {% if video.thumbnail %}
+                <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.title }}</h5>
+                    <a href="{% url 'videos:watch' video.id %}" class="btn btn-primary">Watch</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-muted">No videos yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

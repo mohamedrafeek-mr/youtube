@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Home - YouTube{% endblock %}
+{% block content %}
+<!-- Category Chips -->
+<div class="category-chips mb-3">
+  <button class="btn btn-secondary btn-sm">All</button>
+  <button class="btn btn-outline-secondary btn-sm">Music</button>
+  <button class="btn btn-outline-secondary btn-sm">Tamil Cinema</button>
+  <button class="btn btn-outline-secondary btn-sm">Gaming</button>
+  <button class="btn btn-outline-secondary btn-sm">Albums</button>
+  <button class="btn btn-outline-secondary btn-sm">Live</button>
+  <button class="btn btn-outline-secondary btn-sm">Indian pop music</button>
+  <button class="btn btn-outline-secondary btn-sm">Television comedy</button>
+  <!-- Add more as needed -->
+</div>
+
+<!-- Shorts Section -->
+<div class="mb-4">
+  <h5 class="mb-2"><i class="bi bi-lightning-charge text-danger"></i> Shorts</h5>
+  <div class="shorts-scroll">
+    {% for short in shorts %}
+    <div class="card bg-dark text-white">
+      <a href="{% url 'videos:watch' short.id %}">
+        {% if short.thumbnail and short.thumbnail.name %}
+          <img src="{{ short.thumbnail.url }}" class="card-img-top" alt="{{ short.title }}" style="height:220px;object-fit:cover;">
+        {% else %}
+          <img src="/static/default_thumbnail.jpg" class="card-img-top" alt="{{ short.title }}" style="height:220px;object-fit:cover;">
+        {% endif %}
+      </a>
+      <div class="card-body p-2">
+        <div class="d-flex align-items-center mb-1">
+          <img src="{{ short.uploader.profile.avatar.url|default:'/static/default_avatar.png' }}" class="avatar me-2" width="28" height="28" alt="Avatar">
+          <span class="small">{{ short.uploader.username }}</span>
+        </div>
+        <div class="small">{{ short.title|truncatechars:30 }}</div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="text-muted">No shorts yet.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Main Video Grid -->
+<div class="row">
+  {% for video in latest_videos %}
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+    <div class="card bg-dark text-white h-100">
+      <a href="{% url 'videos:watch' video.id %}" class="position-relative">
+        {% if video.thumbnail and video.thumbnail.name %}
+          <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}" style="height:180px;object-fit:cover;">
+        {% else %}
+          <img src="/static/default_thumbnail.jpg" class="card-img-top" alt="{{ video.title }}" style="height:180px;object-fit:cover;">
+        {% endif %}
+        <span class="position-absolute bottom-0 end-0 m-2 px-2 py-1 bg-dark bg-opacity-75 rounded small">{{ video.duration|default:'--:--' }}</span>
+      </a>
+      <div class="card-body p-2">
+        <div class="d-flex align-items-center mb-1">
+          {% if video.uploader.profile.avatar and video.uploader.profile.avatar.name %}
+            <img src="{{ video.uploader.profile.avatar.url }}" class="avatar me-2" width="32" height="32" alt="Avatar">
+          {% else %}
+            <img src="/static/human_avatar.png" class="avatar me-2" width="32" height="32" alt="Avatar">
+          {% endif %}
+          <span class="fw-bold small">{{ video.uploader.username }}</span>
+        </div>
+        <div class="fw-semibold small">{{ video.title|truncatechars:40 }}</div>
+        <div class="text-muted small">{{ video.views }} views • {{ video.created_at|date:"M d, Y" }}</div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center text-muted">No videos yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

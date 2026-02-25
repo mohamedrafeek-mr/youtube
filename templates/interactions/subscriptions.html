@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Subscriptions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>My Subscriptions</h1>
+    <div class="row">
+        {% for profile in subscribed_profiles %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" class="avatar mb-2" alt="Avatar">
+                    {% else %}
+                        <img src="/static/human_avatar.png" class="avatar mb-2" alt="Avatar">
+                    {% endif %}
+                    <h5 class="card-title">{{ profile.channel_name }}</h5>
+                    <a href="{% url 'users:channel' profile.user.username %}" class="btn btn-primary">View Channel</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>You have no subscriptions yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

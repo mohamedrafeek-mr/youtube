@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Create Playlist{% endblock %}
+{% block content %}
+<h2>New Playlist</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="is_public">Public?</label>
+        <input type="checkbox" name="is_public" id="is_public" checked>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Watch History{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Your Watch History</h2>
+  <ul class="list-group">
+    {% for v in views %}
+    <li class="list-group-item">
+      <a href="{% url 'videos:watch' v.video.id %}">
+        <img src="{{ v.video.thumbnail.url }}" width="80" class="me-2" alt="{{ v.video.title }}">
+        {{ v.video.title }}
+      </a>
+      <span class="ms-2 text-muted">{{ v.viewed_at|date:"M d, Y H:i" }}</span>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No history yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

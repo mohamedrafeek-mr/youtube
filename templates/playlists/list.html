@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}My Playlists{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>My Playlists</h1>
+    <a href="{% url 'playlists:create' %}" class="btn btn-primary mb-3">Create New Playlist</a>
+    <div class="row">
+        {% for playlist in playlists %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                {% if playlist.videos.first.thumbnail %}
+                <img src="{{ playlist.videos.first.thumbnail.url }}" class="card-img-top" alt="{{ playlist.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ playlist.name }}</h5>
+                    <p class="card-text">{{ playlist.videos.count }} videos</p>
+                    <a href="{% url 'playlists:detail' playlist.id %}" class="btn btn-outline-primary">View</a>
+                    <a href="{% url 'playlists:edit' playlist.id %}" class="btn btn-outline-secondary">Edit</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>You have no playlists yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

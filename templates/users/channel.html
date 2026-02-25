@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Channel - {{ profile.channel_name }}{% endblock %}
+{% block content %}
+<div class="card bg-dark text-white p-4 mb-4">
+	<div class="d-flex align-items-center mb-3">
+		{% if profile.avatar and profile.avatar.name %}
+			<img src="{{ profile.avatar.url }}" class="avatar me-3" width="56" height="56" alt="Avatar">
+		{% else %}
+			<img src="/static/human_avatar.png" class="avatar me-3" width="56" height="56" alt="Avatar">
+		{% endif %}
+		<div>
+			<h2 class="mb-0">{{ profile.channel_name }}</h2>
+			<div class="text-muted">Subscribers: {{ profile.subscribers.count }}</div>
+		</div>
+	</div>
+	<p>{{ profile.bio }}</p>
+</div>
+
+<div class="row">
+	{% for video in videos %}
+	<div class="col-12 mb-2">
+		<div class="card bg-dark text-white">
+			<div class="row g-0">
+				<div class="col-md-3">
+					<a href="{% url 'videos:watch' video.id %}">
+						{% if video.thumbnail and video.thumbnail.name %}
+							<img src="{{ video.thumbnail.url }}" class="img-fluid rounded-start" alt="{{ video.title }}" style="height:120px;object-fit:cover;width:100%;">
+						{% else %}
+							<img src="/static/default_thumbnail.jpg" class="img-fluid rounded-start" alt="{{ video.title }}" style="height:120px;object-fit:cover;width:100%;">
+						{% endif %}
+					</a>
+				</div>
+				<div class="col-md-7">
+					<div class="card-body">
+						<h6 class="card-title">{{ video.title }}</h6>
+						<p class="card-text small">{{ video.views }} views &bull; {{ video.created_at|date:"M d, Y" }} &bull; {{ video.category.name|default:'Uncategorized' }}</p>
+					</div>
+				</div>
+				{% if user == profile.user %}
+				<div class="col-md-2 d-flex align-items-center justify-content-center">
+					<a href="{% url 'videos:edit' video.id %}" class="btn btn-outline-primary btn-sm me-1 ">Edit</a>
+					<a href="{% url 'videos:delete' video.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% empty %}
+	<div class="col-12">
+		<p class="text-muted">No videos uploaded yet.</p>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
