@@ -42,4 +42,4 @@ sqlparse
 tzdata
 urllib3
 virtualenv
-
+gunicorn
